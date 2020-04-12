@@ -29,6 +29,10 @@ public class BattleEnemy : MonoBehaviour
         }
         health -= damageTaken;
     }
+    public int getHealth() {
+        return health;
+    }
+
     public int getDamageTaken() {
         return damageTaken;
     }

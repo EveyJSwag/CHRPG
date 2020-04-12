@@ -4,19 +4,6 @@ using UnityEngine;
 
 public class SpanEnemies : MonoBehaviour
 {
-    // Start is called before the first frame update
-    /*
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    */
     private Vector3 positionV = new Vector3(9f, -4f, 0f);
     public GameObject enemies;
     private int enemiesAmount = 0;
@@ -29,14 +16,10 @@ public class SpanEnemies : MonoBehaviour
 
         for (int i = 0; i < (int)Random.Range(1, 4); i++)
         {
-            
             enemyArray[i]=Instantiate(enemies, positionV, Quaternion.identity);
             posArray[i] = positionV;
             positionV.y = positionV.y + 3;
             enemiesAmount++;
-            //enemyArray[i] = Instantiate(enemies, positionV, Quaternion.identity);
-            //enemyArray[i] = enemies;
-            //enemyArray.SetValue(enemies, i);
         }
         Debug.Log(this.getSize());
     }
@@ -61,30 +44,25 @@ public class SpanEnemies : MonoBehaviour
         return enemyArray[index];
 
     }
+    public void removeEnemy(int at) {
+        GameObject[] tempEnemyArray = new GameObject[enemiesAmount-1];
+        int index = 0;
+        for (int i = 0; i < enemiesAmount; i++) {
+            if (i != at) {
+                tempEnemyArray[index] = enemyArray[i];
+                index++;
+            }
+           
+        }
+        enemyArray = tempEnemyArray;
+        enemiesAmount--;
+
+    }
     public int getSize() {
         return enemiesAmount;
     }
     public Vector3 getOgPos(int index) {
         return posArray[index];
     }
-    /*
-    public GameObject[] initEnemies() {
-        for (int i = 0; i < (int)Random.Range(1, 4); i++)
-        {
-
-            enemyArray[i] = Instantiate(enemies, positionV, Quaternion.identity);
-            posArray[i] = positionV;
-            positionV.y = positionV.y + 3;
-            enemiesAmount++;
-            //enemyArray[i] = Instantiate(enemies, positionV, Quaternion.identity);
-            //enemyArray[i] = enemies;
-            //enemyArray.SetValue(enemies, i);
-        }
-        return enemyArray;
-
-    }
-    */
-    //public void 
-
 
 }

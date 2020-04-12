@@ -10,10 +10,16 @@ public class BattleManagerS : MonoBehaviour
     public BattleState state;
     private float moveSpeed = 20f;
 
-    // *** PLAYER AND ENEMY GAME OBJECTS *** 
+    // **** PLAYER AND ENEMY GAME OBJECTS ****
+    // *** PLAYER ***
     public GameObject player;
+    private BattleChar player_properties;
+    // *** ENEMY ***
     public GameObject enemy;
+    private SpanEnemies enemy_properties;
     private GameObject enemyChosen;
+    private BattleEnemy enemyChosen_properties;
+    private int enemyChosenIndex = 0;
 
     // *** TURN QUEUE ***
     private GameObject[] turnQueue = new GameObject[6];
@@ -22,7 +28,9 @@ public class BattleManagerS : MonoBehaviour
 
     // *** UI OBJECTS *** //
     public GameObject UIController;
+    UIController UI_properties;
     public GameObject damageDisplayer;
+    DamageSpawner floating_damage_number;
     GameObject cursor;
     GameObject abilityList;
     // UI OBJECTS, BUT USED FOR THE LOCATION OF CERTAIN BUTTONS
@@ -36,20 +44,32 @@ public class BattleManagerS : MonoBehaviour
     // **** MOVEMENT VARIABLES ****
     // *** PLAYER/PARTY ***
     private Vector3 player_original_position;
+    private Vector3 travel_to;
     private float player_initial_start_time;
     private float player_travel_length;
     // ***     ENEMY    ***
     private GameObject currentEnemy;
+    BattleEnemy currentEnemy_properties;
     private Vector3 enemy_original_position;
     private float enemy_initial_start_time;
     private float enemy_travel_length;
    
     void Start()
     {
+        // *** INITIALIZING PLAYER OBJECT ***
+        player_properties = player.GetComponent<BattleChar>();
+
+        // *** INITIALIZING ENEMY OBJECT[S]***
+        enemy_properties = enemy.GetComponent<SpanEnemies>();
+
+        // *** INITIALIZING UI OBJECTS[S]***
+        UI_properties = UIController.GetComponent<UIController>();
+
         // *** THIS IS THE LOCATION OF THE PLAYER'S NAME... ***
         // *** WILL NEED SOMETHING FOR OTHER PARTY MEMBERS... ***
-        playerName = UIController.GetComponent<UIController>().charName;
-        
+        //playerName = UIController.GetComponent<UIController>().charName;
+        playerName = UI_properties.charName;
+
         // *** THIS IS USED THE MOVE FUNCTION ***
         // *** WILL PROBABLY NEED ONE FOR EACH PARTY MEMEBER ***
         player_original_position = player.transform.position;
@@ -58,7 +78,7 @@ public class BattleManagerS : MonoBehaviour
         buttonSelectIndex = 0;
 
         // *** THIS FUNCTION WILL SPAWN BETWEEN 1-3 ENEMIES FOR THE PLAYER TO FIGHT ***
-        enemy.GetComponent<SpanEnemies>().Spawn();
+        enemy_properties.Spawn();
         
         /// **** THIS INITIALIZES THE 'TURN QUEUE' BASED ON THE SPEED OF THE GAME OBJECT ****
         /* ***HOW THIS FUNCTION WORKS***
@@ -86,6 +106,9 @@ public class BattleManagerS : MonoBehaviour
         {
             state = BattleState.ENEMYPARTYTURN;
         }
+        // ***THIS IS FOR THE DAMAGE NUMBERS THAT POP-UP***
+        floating_damage_number = damageDisplayer.GetComponent<DamageSpawner>();
+
     }
 
     // *** MAIN GAME LOOP... NOTICE THERE'S ONLY ONE FUNCTION IN IT ***
@@ -100,13 +123,13 @@ public class BattleManagerS : MonoBehaviour
         //Place holder for when other party memebers are added
         int queueIndex = 0;
         int [] speedArray = new int[turnQueue.Length];
-        for (int i = 0; i < enemy.GetComponent<SpanEnemies>().getSize(); i++) {
-            turnQueue[i] = enemy.GetComponent<SpanEnemies>().getEnemy(i);
-            speedArray[i] = (int)enemy.GetComponent<SpanEnemies>().getEnemy(i).GetComponent<BattleEnemy>().getEnemySpeed();
+        for (int i = 0; i < enemy_properties.getSize(); i++) {
+            turnQueue[i] = enemy_properties.getEnemy(i);
+            speedArray[i] = (int)enemy_properties.getEnemy(i).GetComponent<BattleEnemy>().getEnemySpeed();
             queueIndex++;
         }
         turnQueue[queueIndex] = player;
-        speedArray[queueIndex] = (int)player.GetComponent<BattleChar>().getPlayerSpeed();
+        speedArray[queueIndex] = (int)player_properties.getPlayerSpeed();
         /// YES, THIS IS FUCKING BUBBLE SORT, DO NOT FUCKING ROAST ME
         /// FUCK
         for (int i = 0; i < queueIndex+1; i++) {
@@ -143,7 +166,7 @@ public class BattleManagerS : MonoBehaviour
         else if (state == BattleState.PLAYERPARTYTURNSTART)
         {
             Vector3 playerNamePos = new Vector3(playerName.transform.position.x + 3f, playerName.transform.position.y, 0f);
-            cursor = UIController.GetComponent<UIController>().insCursor(playerNamePos);
+            cursor = UI_properties.insCursor(playerNamePos);
             state = BattleState.PLAYERPARTYTURN;
         }
         else if (state == BattleState.PLAYERPARTYTURN)
@@ -151,7 +174,7 @@ public class BattleManagerS : MonoBehaviour
             if (Input.GetKeyUp(KeyCode.Return))
             {
                 Vector3 abilityListPos = new Vector3(playerName.transform.position.x + 5.8f, playerName.transform.position.y - 1.38f, 0f);
-                abilityList = UIController.GetComponent<UIController>().insAbilityMenu(abilityListPos);
+                abilityList = UI_properties.insAbilityMenu(abilityListPos);
                 cursor.transform.position = initButtons()[0];
                 state = BattleState.PARTYSELECTACTION;
                 buttonArr = initButtons();
@@ -166,23 +189,28 @@ public class BattleManagerS : MonoBehaviour
             changeEnemySelection(cursor, initEnemyArray(), BattleState.PARTYATTACKSTART);
             player_initial_start_time = Time.time;
             player_travel_length = Vector3.Distance(player.transform.position, initEnemyArray()[buttonSelectIndex]);
+            
         }
         else if (state == BattleState.PARTYATTACKSTART)
         {
             // ***PLAYER MOVES TOWARDS THE ENEMY***
-            move(player, player_original_position, enemyChosen.transform.position, player_initial_start_time, player_travel_length);
-            if (player.transform.position == enemyChosen.transform.position)
+            move(player, player_original_position, travel_to, player_initial_start_time, player_travel_length);
+            if (player.transform.position == travel_to)
             {
                 state = BattleState.PARTYATTACKEND;
-                enemyChosen.GetComponent<BattleEnemy>().takeDamage(player.GetComponent<BattleChar>().getAttack());
-                damageDisplayer.GetComponent<DamageSpawner>().insDam(enemyChosen, enemyChosen.GetComponent<BattleEnemy>().getDamageTaken());
+                enemyChosen_properties.takeDamage(player_properties.getAttack());
+                floating_damage_number.insDam(enemyChosen, enemyChosen_properties.getDamageTaken());
+                if (enemyChosen_properties.getHealth() <= 0)
+                {
+                    killEnemy(enemyChosen);
+                }
                 player_initial_start_time = Time.time;
             }
         }
         else if (state == BattleState.PARTYATTACKEND)
         {
             // ***PLAYER MOVES BACK TO ORIGINAL SPOT***
-            move(player, enemyChosen.transform.position, player_original_position, player_initial_start_time, player_travel_length);
+            move(player, travel_to, player_original_position, player_initial_start_time, player_travel_length);
             if (player.transform.position == player_original_position)
             {
                 state = BattleState.DECIDETURN;
@@ -199,6 +227,7 @@ public class BattleManagerS : MonoBehaviour
         else if (state == BattleState.ENEMYPARTYTURN)
         {
             currentEnemy = turnQueue[turnIndex];
+            currentEnemy_properties = currentEnemy.GetComponent<BattleEnemy>();
             enemy_original_position = currentEnemy.transform.position;
             enemy_travel_length = Vector3.Distance(currentEnemy.transform.position, player.transform.position);
             state = BattleState.ENEMYSELECTACTION;
@@ -214,8 +243,8 @@ public class BattleManagerS : MonoBehaviour
             move(currentEnemy, enemy_original_position, player.transform.position, enemy_initial_start_time,enemy_travel_length);
             if (currentEnemy.transform.position == player.transform.position)
             {
-                player.GetComponent<BattleChar>().takeDamage(currentEnemy.GetComponent<BattleEnemy>().getAttack());
-                damageDisplayer.GetComponent<DamageSpawner>().insDam(player, player.GetComponent<BattleChar>().getDamageTaken());
+                player_properties.takeDamage(currentEnemy_properties.getAttack());
+                floating_damage_number.insDam(player, player_properties.getDamageTaken());
                 state = BattleState.ENEMYATTACKEND;
                 enemy_initial_start_time = Time.time;
             }
@@ -302,6 +331,9 @@ public class BattleManagerS : MonoBehaviour
         {
             state = stateToChangeTo;
             enemyChosen = enemy.GetComponent<SpanEnemies>().getEnemy(buttonSelectIndex);
+            enemyChosen_properties = enemyChosen.GetComponent<BattleEnemy>();
+            travel_to = enemyChosen.transform.position;
+            enemyChosenIndex = buttonSelectIndex;
             Debug.Log("enemyChosen: " + buttonSelectIndex);
             buttonSelectIndex = 0;
             Destroy(cursor);
@@ -329,10 +361,28 @@ public class BattleManagerS : MonoBehaviour
     }
     private Vector3[] initEnemyArray () {
         // ***ESSENTIALLY DOES THE SAME THING AS ABOVE EXCEPT WITH ENEMIES***
-        Vector3[] enemyPosArr = new Vector3[enemy.GetComponent<SpanEnemies>().getSize()];
-        for (int i = 0; i < enemy.GetComponent<SpanEnemies>().getSize(); i++) {
-            enemyPosArr[i] = enemy.GetComponent<SpanEnemies>().getEnemy(i).transform.position;
+        int enemy_amount = enemy.GetComponent<SpanEnemies>().getSize();
+        SpanEnemies enemy_x = enemy.GetComponent<SpanEnemies>();
+        Vector3[] enemyPosArr = new Vector3[enemy_amount];
+        for (int i = 0; i < enemy_amount; i++) {
+            enemyPosArr[i] = enemy_x.getEnemy(i).transform.position;
         }
         return enemyPosArr;
     }
+
+    public void killEnemy(GameObject enemyToKill) {
+        // ***RESET TURN QUEUE***
+        SpanEnemies enemyToKill_properties = enemyToKill.GetComponent<SpanEnemies>();
+        enemy_properties.removeEnemy(enemyChosenIndex);
+        turnQueue = new GameObject[enemy_properties.getSize()+1];
+        turnQueueLength--;
+        turnIndex--;
+        initTurnQueue();
+        Debug.Log(turnIndex);
+        for (int i = 0; i < turnQueueLength; i++) {
+            Debug.Log("OBJECT NAME: " + turnQueue[i].name);
+        }
+        Destroy(enemyToKill);
+    }
+
 }

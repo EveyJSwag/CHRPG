@@ -566,7 +566,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 35
-  attack: 10
+  attack: 20
   defense: 3
   level: 1
   speed: 60
@@ -602,10 +602,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbdcdec495a1ea644b23089c3e40b6d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 411569489}
-  enemies: {fileID: 810151012}
-  battleState: {fileID: 0}
-  isCalled: 1
 --- !u!4 &503845755
 Transform:
   m_ObjectHideFlags: 0
