@@ -48,6 +48,7 @@ public class BattleManagerS : MonoBehaviour
     private float player_initial_start_time;
     private float player_travel_length;
     // ***     ENEMY    ***
+    private Vector3 enemy_attack_pos;
     private GameObject currentEnemy;
     BattleEnemy currentEnemy_properties;
     private Vector3 enemy_original_position;
@@ -118,7 +119,8 @@ public class BattleManagerS : MonoBehaviour
     {
         turnManager();  
     }
-    
+    // JERRY NEEDS TO GO UP
+    // ENEMY GO DOWN
     public void initTurnQueue() {
         //Place holder for when other party memebers are added
         int queueIndex = 0;
@@ -236,12 +238,14 @@ public class BattleManagerS : MonoBehaviour
         {
             // **I'll put enemy abilites here later... but for now...**
             state = BattleState.ENEMYATTACKSTART;
+            Vector3 modPlayerPos = player.transform.position;
+            enemy_attack_pos = new Vector3(modPlayerPos.x+0.2f, modPlayerPos.y - 2.8f);
             enemy_initial_start_time = Time.time;
         }
         else if (state == BattleState.ENEMYATTACKSTART)
         {
-            move(currentEnemy, enemy_original_position, player.transform.position, enemy_initial_start_time,enemy_travel_length);
-            if (currentEnemy.transform.position == player.transform.position)
+            move(currentEnemy, enemy_original_position, enemy_attack_pos, enemy_initial_start_time,enemy_travel_length);
+            if (currentEnemy.transform.position == enemy_attack_pos)
             {
                 player_properties.takeDamage(currentEnemy_properties.getAttack());
                 floating_damage_number.insDam(player, player_properties.getDamageTaken());
@@ -251,7 +255,7 @@ public class BattleManagerS : MonoBehaviour
         }
         else if (state == BattleState.ENEMYATTACKEND)
         {
-            move(currentEnemy,  player.transform.position, enemy_original_position, enemy_initial_start_time, enemy_travel_length);
+            move(currentEnemy, enemy_attack_pos, enemy_original_position, enemy_initial_start_time, enemy_travel_length);
             if (currentEnemy.transform.position == enemy_original_position)
             {
                 state = BattleState.DECIDETURN;
@@ -333,6 +337,7 @@ public class BattleManagerS : MonoBehaviour
             enemyChosen = enemy.GetComponent<SpanEnemies>().getEnemy(buttonSelectIndex);
             enemyChosen_properties = enemyChosen.GetComponent<BattleEnemy>();
             travel_to = enemyChosen.transform.position;
+            travel_to = new Vector3(travel_to.x, travel_to.y+2.5f);
             enemyChosenIndex = buttonSelectIndex;
             Debug.Log("enemyChosen: " + buttonSelectIndex);
             buttonSelectIndex = 0;
@@ -379,9 +384,6 @@ public class BattleManagerS : MonoBehaviour
         turnIndex--;
         initTurnQueue();
         Debug.Log(turnIndex);
-        for (int i = 0; i < turnQueueLength; i++) {
-            Debug.Log("OBJECT NAME: " + turnQueue[i].name);
-        }
         Destroy(enemyToKill);
     }
 
