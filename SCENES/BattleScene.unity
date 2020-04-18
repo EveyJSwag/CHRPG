@@ -565,14 +565,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8d295c0336d10841aa118e1f1dcd0f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 35
+  health: 100
   attack: 20
-  defense: 3
+  defense: 10
   level: 1
-  speed: 60
+  speed: 100
+  total_exp: 0
   enemyB: {fileID: 810151012}
   selector: {fileID: 0}
   bUI: {fileID: 0}
+--- !u!114 &411569496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411569489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8871060d586f60a49a87dd19e9e502e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &503845753
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,6 +663,8 @@ MonoBehaviour:
   enemy: {fileID: 810151012}
   UIController: {fileID: 1733995686}
   damageDisplayer: {fileID: 212658294}
+  victoryScreen: {fileID: 7612176010994239689, guid: 60a72c4a9a4c8664f9c07a04a60b84c2,
+    type: 3}
 --- !u!4 &506525696
 Transform:
   m_ObjectHideFlags: 0

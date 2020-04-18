@@ -1,21 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class BattleChar : MonoBehaviour
 {
     // ***PLAYER STATS***
-    public int health = 35;
-    public int attack = 10;
-    public int defense = 4;
+    // ***Base***
+    public int health = 100;
+    public int attack = 20;
+    public int defense = 10;
     public int level = 1;
-    public float speed = 100;
+    public float speed = 40;
     // ******************
 
+    ///////////////
+    // EXP STUFF //
+    ///////////////
+    public int total_exp;
 
     private int damageTaken;
-    private bool playerMove = false;
-    private bool hasSelect = false;
     public GameObject enemyB;
     public GameObject selector;
     public Canvas bUI;
@@ -46,5 +50,18 @@ public class BattleChar : MonoBehaviour
     public int getAttack() {
         return attack;
     }
+    public int getExp() {
+        return total_exp;
+    }
+
+    public void gainExp(int expGained)
+    {
+        total_exp += expGained;
+    }
+    public int calculateLevel()
+    {
+        return (int)(0.5 * Math.Round(Math.Sqrt(total_exp)));
+    }
+
 
 }

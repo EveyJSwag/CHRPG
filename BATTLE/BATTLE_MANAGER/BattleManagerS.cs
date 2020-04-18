@@ -8,7 +8,7 @@ public class BattleManagerS : MonoBehaviour
     // *** BATTLE STATES ***
     public enum BattleState { DECIDETURN, PLAYERPARTYTURNSTART, PLAYERPARTYTURN,PARTYSELECTACTION, PARTYSELECTENEMY, PARTYATTACKSTART,PARTYATTACKEND,ENEMYPARTYTURN, ENEMYSELECTACTION, ENEMYATTACKSTART,ENEMYATTACKEND,WON, LOST}
     public BattleState state;
-    private float moveSpeed = 20f;
+    private float moveSpeed = 30f;
 
     // **** PLAYER AND ENEMY GAME OBJECTS ****
     // *** PLAYER ***
@@ -31,8 +31,11 @@ public class BattleManagerS : MonoBehaviour
     UIController UI_properties;
     public GameObject damageDisplayer;
     DamageSpawner floating_damage_number;
+    public GameObject victoryScreen;
+    VictoryScreen victoryScreen_properties;
     GameObject cursor;
     GameObject abilityList;
+
     // UI OBJECTS, BUT USED FOR THE LOCATION OF CERTAIN BUTTONS
     private Text playerName;
     private Vector3 attackButton;
@@ -54,7 +57,12 @@ public class BattleManagerS : MonoBehaviour
     private Vector3 enemy_original_position;
     private float enemy_initial_start_time;
     private float enemy_travel_length;
-   
+
+    //////////////////////////////////
+    // EXP GAINED THROUGHOUT BATTLE //
+    //////////////////////////////////
+    private int battle_exp = 0;
+
     void Start()
     {
         // *** INITIALIZING PLAYER OBJECT ***
@@ -65,6 +73,7 @@ public class BattleManagerS : MonoBehaviour
 
         // *** INITIALIZING UI OBJECTS[S]***
         UI_properties = UIController.GetComponent<UIController>();
+        victoryScreen_properties = victoryScreen.GetComponent<VictoryScreen>();
 
         // *** THIS IS THE LOCATION OF THE PLAYER'S NAME... ***
         // *** WILL NEED SOMETHING FOR OTHER PARTY MEMBERS... ***
@@ -151,20 +160,39 @@ public class BattleManagerS : MonoBehaviour
     public void turnManager() {
         if (turnIndex >= turnQueueLength) {
             turnIndex = 0;
+            Debug.Log("Enemies Left " + enemy_properties.getSize());
         }
+
+        /////////////////
+        // VICTORY !!! //
+        /////////////////
+        if (state == BattleState.WON) {
+            //////////////////////////////////////////
+            // Configure the victory screen here... //
+            //////////////////////////////////////////
+            configureVictoryScreen();
+        }
+
         /// *** THIS BLOCK WILL DECIDE WHO WILL GO NEXT... ***
         /// *** THIS WILL CHANGE LATER ONCE OTHER PARTY MEMBERS ARE ADDED ***
-        if (state == BattleState.DECIDETURN) 
+        if (state == BattleState.DECIDETURN)
         {
             if (turnQueue[turnIndex].name == "JerryBattle")
                 state = BattleState.PLAYERPARTYTURNSTART;
             else
                 state = BattleState.ENEMYPARTYTURN;
+            if (enemy_properties.getSize() < 1)
+            {
+                state = BattleState.WON;
+                Vector3 victoryScreenPos = new Vector3(player.transform.position.x + 13f, player.transform.position.y);
+                
+                Instantiate(victoryScreen, victoryScreenPos, Quaternion.identity);
+            }
         }
 
-       /*************************************************** 
-       *******************#PLAYER TURN#********************
-       ****************************************************/
+        /*************************************************** 
+        *******************#PLAYER TURN#********************
+        ****************************************************/
         else if (state == BattleState.PLAYERPARTYTURNSTART)
         {
             Vector3 playerNamePos = new Vector3(playerName.transform.position.x + 3f, playerName.transform.position.y, 0f);
@@ -191,7 +219,7 @@ public class BattleManagerS : MonoBehaviour
             changeEnemySelection(cursor, initEnemyArray(), BattleState.PARTYATTACKSTART);
             player_initial_start_time = Time.time;
             player_travel_length = Vector3.Distance(player.transform.position, initEnemyArray()[buttonSelectIndex]);
-            
+
         }
         else if (state == BattleState.PARTYATTACKSTART)
         {
@@ -219,9 +247,10 @@ public class BattleManagerS : MonoBehaviour
                 turnIndex++;
             }
         }
+        
         /*************************************************** 
         ****************************************************
-        ****************************************************/ 
+        ****************************************************/
 
         /*************************************************** 
          *******************#ENEMY TURN#********************
@@ -239,12 +268,12 @@ public class BattleManagerS : MonoBehaviour
             // **I'll put enemy abilites here later... but for now...**
             state = BattleState.ENEMYATTACKSTART;
             Vector3 modPlayerPos = player.transform.position;
-            enemy_attack_pos = new Vector3(modPlayerPos.x+0.2f, modPlayerPos.y - 2.8f);
+            enemy_attack_pos = new Vector3(modPlayerPos.x + 0.2f, modPlayerPos.y - 2.8f);
             enemy_initial_start_time = Time.time;
         }
         else if (state == BattleState.ENEMYATTACKSTART)
         {
-            move(currentEnemy, enemy_original_position, enemy_attack_pos, enemy_initial_start_time,enemy_travel_length);
+            move(currentEnemy, enemy_original_position, enemy_attack_pos, enemy_initial_start_time, enemy_travel_length);
             if (currentEnemy.transform.position == enemy_attack_pos)
             {
                 player_properties.takeDamage(currentEnemy_properties.getAttack());
@@ -376,15 +405,37 @@ public class BattleManagerS : MonoBehaviour
     }
 
     public void killEnemy(GameObject enemyToKill) {
-        // ***RESET TURN QUEUE***
+        
         SpanEnemies enemyToKill_properties = enemyToKill.GetComponent<SpanEnemies>();
+        int enemyToKill_speed = (int)enemy_properties.getEnemy(enemyChosenIndex).GetComponent<BattleEnemy>().getEnemySpeed();
+
+        /////////////
+        // Get EXP //
+        /////////////
+        int enemyToKill_exp = enemy_properties.getEnemy(enemyChosenIndex).GetComponent<BattleEnemy>().getExpDroped();
+        player_properties.gainExp(enemyToKill_exp);
+        battle_exp += enemyToKill_exp;
+        
+        ///////////////////////////////////////
+        // Remove enemy and reset turn queue //
+        ///////////////////////////////////////
         enemy_properties.removeEnemy(enemyChosenIndex);
         turnQueue = new GameObject[enemy_properties.getSize()+1];
         turnQueueLength--;
-        turnIndex--;
+
+        /////////////////////////////////////////////////////////////////
+        // This is done if the enemy's speed is high than the player's //
+        /////////////////////////////////////////////////////////////////
+        if (enemyToKill_speed > player_properties.getPlayerSpeed())
+            turnIndex--;
         initTurnQueue();
         Debug.Log(turnIndex);
         Destroy(enemyToKill);
+    }
+
+    private void configureVictoryScreen() {
+        victoryScreen_properties.set_exp_text("Jerry: ");
+        victoryScreen_properties.set_exp_text_int(battle_exp);
     }
 
 }

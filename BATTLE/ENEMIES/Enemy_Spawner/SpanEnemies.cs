@@ -7,14 +7,11 @@ public class SpanEnemies : MonoBehaviour
     private Vector3 positionV = new Vector3(9f, -4f, 0f);
     public GameObject enemies;
     private int enemiesAmount = 0;
-    //private static int spawnCount = 
     private GameObject []enemyArray = new GameObject[3];
     private Vector3[] posArray = new Vector3[3];
-    //float swag = 0;
-    //int timeSpawn= 5;
     public void Spawn() {
-
-        for (int i = 0; i < (int)Random.Range(1, 4); i++)
+        int spawn_num = (int)Random.Range(1, 4);
+        for (int i = 0; i < 1; i++)
         {
             enemyArray[i]=Instantiate(enemies, positionV, Quaternion.identity);
             posArray[i] = positionV;
@@ -22,21 +19,6 @@ public class SpanEnemies : MonoBehaviour
             enemiesAmount++;
         }
         Debug.Log(this.getSize());
-    }
-
-    void Start()
-    {
-        //Spawn();
-    }
-    private void Update()
-    {
-        /*
-        swag = Time.deltaTime + swag;
-        if (swag > timeSpawn) {
-            Spawn();
-            swag= 0;
-        }
-        */
     }
 
     public GameObject getEnemy(int index) {
@@ -52,7 +34,6 @@ public class SpanEnemies : MonoBehaviour
                 tempEnemyArray[index] = enemyArray[i];
                 index++;
             }
-           
         }
         enemyArray = tempEnemyArray;
         enemiesAmount--;

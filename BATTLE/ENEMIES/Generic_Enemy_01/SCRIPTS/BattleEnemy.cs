@@ -5,13 +5,17 @@ using UnityEngine;
 public class BattleEnemy : MonoBehaviour
 {
     // ***ENEMY STATS***
-    public int attack = 8;
-    public int health = 25;
-    public int defense = 4;
-    public float speed = 25;
+    // ****Base****
+    public int attack = 15;
+    public int health = 75;
+    public int defense = 10;
+    public float speed = 35;
     private int damageTaken;
     // *****************
-    
+    /////////////////////
+    // EXP DROP AMOUNT //
+    /////////////////////
+    private int exp_drop = 5;
     void Start()
     {
         health = 25;
@@ -41,6 +45,10 @@ public class BattleEnemy : MonoBehaviour
     }
     public float getEnemySpeed() {
         return speed;
+    }
+
+    public int getExpDroped() {
+        return exp_drop;
     }
 
 }

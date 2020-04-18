@@ -38,10 +38,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a84e064d3fab1b64b871a85ed6bf31cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attack: 4
+  attack: 20
   health: 100
-  defense: 4
-  speed: 100
+  defense: 10
+  speed: 40
 --- !u!114 &510338447
 MonoBehaviour:
   m_ObjectHideFlags: 0
