@@ -11,7 +11,7 @@ public class SpanEnemies : MonoBehaviour
     private Vector3[] posArray = new Vector3[3];
     public void Spawn() {
         int spawn_num = (int)Random.Range(1, 4);
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < spawn_num; i++)
         {
             enemyArray[i]=Instantiate(enemies, positionV, Quaternion.identity);
             posArray[i] = positionV;

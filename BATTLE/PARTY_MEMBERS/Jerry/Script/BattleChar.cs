@@ -60,7 +60,7 @@ public class BattleChar : MonoBehaviour
     }
     public int calculateLevel()
     {
-        return (int)(0.5 * Math.Round(Math.Sqrt(total_exp)));
+        return (int)(0.3 * Math.Round(Math.Sqrt(total_exp)));
     }
 
 

@@ -33,6 +33,8 @@ public class BattleManagerS : MonoBehaviour
     DamageSpawner floating_damage_number;
     public GameObject victoryScreen;
     VictoryScreen victoryScreen_properties;
+    private Vector3 end_text_location;
+    
     GameObject cursor;
     GameObject abilityList;
 
@@ -73,7 +75,8 @@ public class BattleManagerS : MonoBehaviour
 
         // *** INITIALIZING UI OBJECTS[S]***
         UI_properties = UIController.GetComponent<UIController>();
-        victoryScreen_properties = victoryScreen.GetComponent<VictoryScreen>();
+        
+        
 
         // *** THIS IS THE LOCATION OF THE PLAYER'S NAME... ***
         // *** WILL NEED SOMETHING FOR OTHER PARTY MEMBERS... ***
@@ -170,7 +173,8 @@ public class BattleManagerS : MonoBehaviour
             //////////////////////////////////////////
             // Configure the victory screen here... //
             //////////////////////////////////////////
-            configureVictoryScreen();
+            Debug.Log(victoryScreen.transform.position);
+            
         }
 
         /// *** THIS BLOCK WILL DECIDE WHO WILL GO NEXT... ***
@@ -184,9 +188,11 @@ public class BattleManagerS : MonoBehaviour
             if (enemy_properties.getSize() < 1)
             {
                 state = BattleState.WON;
-                Vector3 victoryScreenPos = new Vector3(player.transform.position.x + 13f, player.transform.position.y);
+                Vector3 victoryScreenPos = new Vector3(player.transform.position.x + 13f, player.transform.position.y-4f);
                 
-                Instantiate(victoryScreen, victoryScreenPos, Quaternion.identity);
+                victoryScreen = Instantiate(victoryScreen, victoryScreenPos, Quaternion.identity);
+                victoryScreen_properties = victoryScreen.GetComponent<VictoryScreen>();
+                configureVictoryScreen();
             }
         }
 
@@ -433,9 +439,29 @@ public class BattleManagerS : MonoBehaviour
         Destroy(enemyToKill);
     }
 
-    private void configureVictoryScreen() {
+    private void configureVictoryScreen()
+    {
+        /////////////////////////////////////////
+        // Fill in text for who is leveling up //
+        /////////////////////////////////////////
         victoryScreen_properties.set_exp_text("Jerry: ");
         victoryScreen_properties.set_exp_text_int(battle_exp);
-    }
+        ////////////////////////////////
+        // If the player levels up... //
+        ////////////////////////////////
+        if (player_properties.level < player_properties.calculateLevel())
+        {
+            victoryScreen_properties.set_lvl_text(player_properties.level, player_properties.calculateLevel());
+            player_properties.level = player_properties.calculateLevel();
+        }
+        ///////////////////////////////////////////////////////////////////////////
+        // Spawn the cursor to the end button so player can go back to overworld //
+        ///////////////////////////////////////////////////////////////////////////
+        end_text_location = victoryScreen.transform.GetChild(0).transform.GetChild(4).transform.position;
+        end_text_location = new Vector3(end_text_location.x + 1f, end_text_location.y);
+        cursor = UI_properties.insCursor(end_text_location);
+        
 
+
+    }
 }

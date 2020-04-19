@@ -566,7 +566,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  attack: 20
+  attack: 25
   defense: 10
   level: 1
   speed: 100
