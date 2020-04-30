@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System;
 
 public class BattleManagerS : MonoBehaviour
 {
+    // *** GAME MANAGER ***
+    //public GameObject gameManager;
+    private Manager gameManager_properties = new Manager();
+    
     // *** BATTLE STATES ***
-    public enum BattleState { DECIDETURN, PLAYERPARTYTURNSTART, PLAYERPARTYTURN,PARTYSELECTACTION, PARTYSELECTENEMY, PARTYATTACKSTART,PARTYATTACKEND,ENEMYPARTYTURN, ENEMYSELECTACTION, ENEMYATTACKSTART,ENEMYATTACKEND,WON, LOST}
+    public enum BattleState { DECIDETURN, PLAYERPARTYTURNSTART, PLAYERPARTYTURN,PARTYSELECTACTION, PARTYSELECTENEMY, PARTYATTACKSTART, PARTYATTACKING,PARTYATTACKEND,ENEMYPARTYTURN, ENEMYSELECTACTION, ENEMYATTACKSTART,ENEMYATTACKEND,WON, LOST}
     public BattleState state;
     private float moveSpeed = 30f;
 
@@ -60,6 +66,11 @@ public class BattleManagerS : MonoBehaviour
     private float enemy_initial_start_time;
     private float enemy_travel_length;
 
+    /////////////////////////////
+    // HOPEFULLY A TEMP VAR... //
+    /////////////////////////////
+    bool displayDamage = true;
+
     //////////////////////////////////
     // EXP GAINED THROUGHOUT BATTLE //
     //////////////////////////////////
@@ -67,6 +78,7 @@ public class BattleManagerS : MonoBehaviour
 
     void Start()
     {
+
         // *** INITIALIZING PLAYER OBJECT ***
         player_properties = player.GetComponent<BattleChar>();
 
@@ -111,7 +123,7 @@ public class BattleManagerS : MonoBehaviour
         }
 
         // ***THIS CODE BLOCK FIGURES OUT WHO GOES FIRST***
-        if (turnQueue[0].name == "JerryBattle")
+        if (turnQueue[0].name == "Final_Jerry_Battle")
         {
             state = BattleState.PLAYERPARTYTURNSTART;
         }
@@ -173,6 +185,12 @@ public class BattleManagerS : MonoBehaviour
             //////////////////////////////////////////
             // Configure the victory screen here... //
             //////////////////////////////////////////
+            
+            
+            if (Input.GetKeyUp(KeyCode.Return)) {
+                player_properties.updateStats(true);
+                SceneManager.LoadScene("SampleScene");
+            }
             Debug.Log(victoryScreen.transform.position);
             
         }
@@ -181,15 +199,16 @@ public class BattleManagerS : MonoBehaviour
         /// *** THIS WILL CHANGE LATER ONCE OTHER PARTY MEMBERS ARE ADDED ***
         if (state == BattleState.DECIDETURN)
         {
-            if (turnQueue[turnIndex].name == "JerryBattle")
+            if (turnQueue[turnIndex].name == "Final_Jerry_Battle")
                 state = BattleState.PLAYERPARTYTURNSTART;
             else
                 state = BattleState.ENEMYPARTYTURN;
             if (enemy_properties.getSize() < 1)
             {
-                state = BattleState.WON;
-                Vector3 victoryScreenPos = new Vector3(player.transform.position.x + 13f, player.transform.position.y-4f);
                 
+                state = BattleState.WON;
+                Vector3 victoryScreenPos = new Vector3(player.transform.position.x + 13f, player.transform.position.y - 4f);
+
                 victoryScreen = Instantiate(victoryScreen, victoryScreenPos, Quaternion.identity);
                 victoryScreen_properties = victoryScreen.GetComponent<VictoryScreen>();
                 configureVictoryScreen();
@@ -231,29 +250,48 @@ public class BattleManagerS : MonoBehaviour
         {
             // ***PLAYER MOVES TOWARDS THE ENEMY***
             move(player, player_original_position, travel_to, player_initial_start_time, player_travel_length);
+            player_properties.setAllAnimFalseBut("walk_right");
             if (player.transform.position == travel_to)
             {
-                state = BattleState.PARTYATTACKEND;
+                player_properties.setAllAnimFalseBut("attack");
+                state = BattleState.PARTYATTACKING;
                 enemyChosen_properties.takeDamage(player_properties.getAttack());
+            }
+        }
+        else if (state == BattleState.PARTYATTACKING) {
+            
+            if (Math.Round(player_properties.getNormTime(),2) > 0.55 && displayDamage) {
                 floating_damage_number.insDam(enemyChosen, enemyChosen_properties.getDamageTaken());
+                displayDamage = false;
                 if (enemyChosen_properties.getHealth() <= 0)
                 {
                     killEnemy(enemyChosen);
                 }
+            }
+            
+            if (!player_properties.getAnimState())
+            {
+                state = BattleState.PARTYATTACKEND;
                 player_initial_start_time = Time.time;
+                player_properties.setAllAnimFalseBut("walk_left");
             }
         }
         else if (state == BattleState.PARTYATTACKEND)
         {
+            ///////////////////////////////////////
+            // I HATE THAT I HAVE TO USE THIS... //
+            ///////////////////////////////////////
+            displayDamage = true;
             // ***PLAYER MOVES BACK TO ORIGINAL SPOT***
             move(player, travel_to, player_original_position, player_initial_start_time, player_travel_length);
             if (player.transform.position == player_original_position)
             {
+                player_properties.setAllAnimFalseBut("idle");
                 state = BattleState.DECIDETURN;
                 turnIndex++;
             }
         }
-        
+
         /*************************************************** 
         ****************************************************
         ****************************************************/
@@ -449,10 +487,10 @@ public class BattleManagerS : MonoBehaviour
         ////////////////////////////////
         // If the player levels up... //
         ////////////////////////////////
-        if (player_properties.level < player_properties.calculateLevel())
+        if (player_properties.level < player_properties.calculateLevel() && player_properties.level > 0)
         {
             victoryScreen_properties.set_lvl_text(player_properties.level, player_properties.calculateLevel());
-            player_properties.level = player_properties.calculateLevel();
+            player_properties.level = player_properties.calculateLevel() + 1;
         }
         ///////////////////////////////////////////////////////////////////////////
         // Spawn the cursor to the end button so player can go back to overworld //

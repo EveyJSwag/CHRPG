@@ -20,11 +20,8 @@ public class LoadNewArea : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("yeet");
-        //Enemy.GetComponent<Enemy>().destroyEnemy();
         
-        if (other.gameObject.name == "JerryOverworld") {
-        //    //Application.LoadLevel();
+        if (other.gameObject.name == "Final_Jerry_Overworld") {
             Debug.Log("YEET");
             
             SceneManager.LoadScene("BattleScene");

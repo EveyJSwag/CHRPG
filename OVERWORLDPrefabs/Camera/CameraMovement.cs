@@ -5,6 +5,8 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     public GameObject follow;
+    private float xFollow;
+    private float yFollow;
     void Start()
     {
         
@@ -14,10 +16,18 @@ public class CameraMovement : MonoBehaviour
     void Update()
     {
 
-        if ( !(follow.transform.position.x > 42f || follow.transform.position.x < -27f))
+        //&& follow.transform.position.y < 28f && follow.transform.position.y > -47f
+        if (follow.transform.position.x < 48f && follow.transform.position.x > -34f)
         {
-            transform.position = new Vector3(follow.transform.position.x, follow.transform.position.y, -10);
+            xFollow = follow.transform.position.x;
+            //transform.position = new Vector3(follow.transform.position.x, follow.transform.position.y, -10);
         }
+        if (follow.transform.position.y < 28f && follow.transform.position.y > -48f)
+        {
+            yFollow = follow.transform.position.y;
+        }
+
+        transform.position = new Vector3(xFollow, yFollow, -10);
 
     }
 }
