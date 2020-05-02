@@ -8,6 +8,7 @@ public class LoadNewArea : MonoBehaviour
 
     private GameObject Enemy;
     // Start is called before the first frame update
+    private Manager gameManager_properties = new Manager();
     void Start()
     {
         
@@ -22,11 +23,10 @@ public class LoadNewArea : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) {
         
         if (other.gameObject.name == "Final_Jerry_Overworld") {
-            Debug.Log("YEET");
-            
+            Debug.Log(other.transform.position);
+            gameManager_properties.set_jerry_last_pos(other.transform.position);
             SceneManager.LoadScene("BattleScene");
             Destroy(FindObjectOfType<GameObject>(), 0.1f);
-
         }
     }
 

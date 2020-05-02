@@ -487,7 +487,7 @@ public class BattleManagerS : MonoBehaviour
         ////////////////////////////////
         // If the player levels up... //
         ////////////////////////////////
-        if (player_properties.level < player_properties.calculateLevel() && player_properties.level > 0)
+        if (player_properties.level < player_properties.calculateLevel() && player_properties.level >= 0)
         {
             victoryScreen_properties.set_lvl_text(player_properties.level, player_properties.calculateLevel());
             player_properties.level = player_properties.calculateLevel() + 1;
@@ -498,8 +498,5 @@ public class BattleManagerS : MonoBehaviour
         end_text_location = victoryScreen.transform.GetChild(0).transform.GetChild(4).transform.position;
         end_text_location = new Vector3(end_text_location.x + 1f, end_text_location.y);
         cursor = UI_properties.insCursor(end_text_location);
-        
-
-
     }
 }

@@ -11,6 +11,5 @@ public class Character : MonoBehaviour
     public int total_exp;
     public float speed;
     public string characterName;
-
     
 }

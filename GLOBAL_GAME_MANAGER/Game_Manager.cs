@@ -19,6 +19,7 @@ public class Manager : MonoBehaviour
     public static int jerry_level = 1;
     public static int jerry_exp = 0;
     public static int enemies_killed = 0;
+    public static Vector3 last_pos = new Vector3(-13.35f, -1.34f);
     
     
 
@@ -47,6 +48,10 @@ public class Manager : MonoBehaviour
 
     public void set_jerry_exp(int value) { jerry_exp = value; }
     public int get_jerry_exp() { return jerry_exp; }
+
+    public void set_jerry_last_pos(Vector3 value) { last_pos = value; }
+    public Vector3 get_jerry_last_pos() { return last_pos; }
+
 
     public void set_enemies_killed() { enemies_killed++; }
     public int get_enemies_killed() { return enemies_killed; }

@@ -10,7 +10,7 @@ public class DamageSpawner : MonoBehaviour
     
     public void insDam(GameObject damageTaker, int damageDone) {
         damageText.text = damageDone.ToString();
-        Instantiate(damageText, damageTaker.transform.position, Quaternion.identity).transform.SetParent(transform);
+        Instantiate(damageText, new Vector3 (damageTaker.transform.position.x, damageTaker.transform.position.y, 0f), Quaternion.identity).transform.SetParent(transform);
     }
 
 }

@@ -81,7 +81,7 @@ public class BattleChar : MonoBehaviour
     }
     public int calculateLevel()
     {
-        return (int)(0.3 * Math.Round(Math.Sqrt(total_exp)));
+        return (int)(0.3 * Math.Round(Math.Sqrt(total_exp))) + 1;
     }
 
     ///////////////////////////////////////////////////////////////
@@ -112,7 +112,6 @@ public class BattleChar : MonoBehaviour
         return animator.GetCurrentAnimatorStateInfo(0).IsName("Final_Jerry_Attack");
     }
     public float getNormTime() {
-        Debug.Log(animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
         return animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
     }
 

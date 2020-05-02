@@ -26,7 +26,7 @@ public class DamageBehavior : MonoBehaviour
     }
 
     public void floatUp() {
-        transform.Translate(new Vector3(0f,floatSpeed *Time.deltaTime,0f));
+        transform.Translate(new Vector2(0f,floatSpeed *Time.deltaTime));
     }
 
 
