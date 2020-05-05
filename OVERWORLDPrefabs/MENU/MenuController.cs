@@ -17,8 +17,8 @@ public class MenuController : MonoBehaviour
     statsMenuBehavior stats_menu_tmp_properties;
     Canvas stats_menuCanvas;
 
-
-
+    public enum MenuControl_States { MAIN, STAT, DEBUG, ITEMS}
+    public MenuControl_States mainState;
     public GameObject player;
     
     void Start()
@@ -33,6 +33,7 @@ public class MenuController : MonoBehaviour
     {
         if ( (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))) {
             if (Input.GetKeyDown(KeyCode.M) && isActive == false) {
+                mainState = MenuControl_States.MAIN;
                 
                 player.SetActive(false);
                 isActive = true;
@@ -62,14 +63,23 @@ public class MenuController : MonoBehaviour
         menu.SetActive(true);
     }
     public void setUpMenu_stats() {
+        mainState = MenuControl_States.STAT;
+        
         stats_menu_tmp = Instantiate(stats_menu);
         stats_menu_tmp_properties = stats_menu_tmp.GetComponent<statsMenuBehavior>();
+        setStatus_stats();
         stats_menuCanvas = stats_menu_tmp.GetComponent<Canvas>();
         stats_menuCanvas.renderMode = RenderMode.ScreenSpaceCamera;
         stats_menuCanvas.worldCamera = Camera.main;
         stats_menuCanvas.planeDistance = 10f;
         stats_menuCanvas.sortingLayerName = "statMenuLayer";
         stats_menuCanvas.sortingOrder = 1;
+    }
+    public bool getStatus_stats() {
+        return stats_menu_tmp_properties.getStatus();
+    }
+    public void setStatus_stats() {
+        stats_menu_tmp_properties.status = true;
     }
 
 }

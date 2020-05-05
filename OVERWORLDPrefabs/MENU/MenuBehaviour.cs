@@ -62,24 +62,30 @@ public class MenuBehaviour : MonoBehaviour
                     choiceIndex = 0;
                 myCursor.transform.position = choicePos[choiceIndex];
             }
-        }
-        if (Input.GetKeyUp(KeyCode.Return) && state == Menu_States.CHOOSE) {
 
-            if (choiceIndex == 0)
+            if (Input.GetKeyDown(KeyCode.Return) && state == Menu_States.CHOOSE)
             {
-                menuController_properties.setUpMenu_stats();
-                state = Menu_States.STATS;
+                if (choiceIndex == 0)
+                {
+                    menuController_properties.setUpMenu_stats();
+                    state = Menu_States.STATS;
+                }
+                if (choiceIndex == 1)
+                    state = Menu_States.ITEMS;
+                if (choiceIndex == 2)
+                    state = Menu_States.SAVE;
+                if (choiceIndex == 3)
+                    state = Menu_States.DEBUG;
+                choiceIndex = 0;
             }
-            if (choiceIndex == 1)
-                state = Menu_States.ITEMS;
-            if (choiceIndex == 2)
-                state = Menu_States.SAVE;
-            if (choiceIndex == 3)
-                state = Menu_States.DEBUG;
-            choiceIndex = 0;
         }
+        
         if (state == Menu_States.STATS) {
-            
+            myCursor.SetActive(false);
+            if (menuController_properties.getStatus_stats() == false) {
+                myCursor.SetActive(true);
+                state = Menu_States.CHOOSE;
+            }
         }
         
         Debug.Log(choiceIndex);

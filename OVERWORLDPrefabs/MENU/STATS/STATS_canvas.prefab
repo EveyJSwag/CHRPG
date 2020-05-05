@@ -1120,7 +1120,7 @@ GameObject:
   - component: {fileID: 2032601369955613450}
   - component: {fileID: 4881440598024736429}
   m_Layer: 5
-  m_Name: STATS_canvas 1
+  m_Name: STATS_canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1235,6 +1235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f108ae43dd53245458c1c958c250dd70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menuController: {fileID: 0}
   state: 0
   cursor: {fileID: 4555760737005245891, guid: 65c09166a1c373843bbf9ca08385145c, type: 3}
   stats: {fileID: 7934335897519170814}
@@ -1260,7 +1261,8 @@ MonoBehaviour:
   SPD_VALUE: {fileID: 1777095352554062751}
   EXP_VALUE: {fileID: 8962023827948571019}
   LEVEL_VALUE: {fileID: 7772044835473160394}
-  cursor: {fileID: 0}
+  BACK: {fileID: 285233381921677424}
+  cursor: {fileID: 4555760737005245891, guid: 65c09166a1c373843bbf9ca08385145c, type: 3}
 --- !u!1 &6500961335780553570
 GameObject:
   m_ObjectHideFlags: 0
