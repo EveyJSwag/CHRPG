@@ -75,14 +75,28 @@ public class MenuBehaviour : MonoBehaviour
                 if (choiceIndex == 2)
                     state = Menu_States.SAVE;
                 if (choiceIndex == 3)
+                {
+                    menuController_properties.setUpMenu_debug();
                     state = Menu_States.DEBUG;
-                choiceIndex = 0;
+                    
+                }
+                //choiceIndex = 0;
             }
         }
-        
-        if (state == Menu_States.STATS) {
+
+        if (state == Menu_States.STATS)
+        {
             myCursor.SetActive(false);
-            if (menuController_properties.getStatus_stats() == false) {
+            if (menuController_properties.getStatus_stats() == false)
+            {
+                myCursor.SetActive(true);
+                state = Menu_States.CHOOSE;
+            }
+        }
+        else if (state == Menu_States.DEBUG) {
+            myCursor.SetActive(false);
+            if (menuController_properties.getStatus_debug() == false)
+            {
                 myCursor.SetActive(true);
                 state = Menu_States.CHOOSE;
             }

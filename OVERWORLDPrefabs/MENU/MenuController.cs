@@ -4,18 +4,31 @@ using UnityEngine;
 
 public class MenuController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    
+    ////////////////////
+    // MAIN MENU VARS //
+    ////////////////////
     public GameObject menu;
     MenuBehaviour menu_properties;
     Canvas menuCanvas;
     bool isActive = false;
 
+    /////////////////////
+    // STATS MENU VARS //
+    /////////////////////
     public GameObject stats_menu;
     GameObject stats_menu_tmp;
     statsMenuBehavior stats_menu_properties;
     statsMenuBehavior stats_menu_tmp_properties;
     Canvas stats_menuCanvas;
+
+    /////////////////////
+    // DEBUG MENU VARS //
+    /////////////////////
+    public GameObject debug_menu;
+    GameObject debug_menu_tmp;
+    debugMenuBehavior debug_menu_properties;
+    debugMenuBehavior debug_menu_tmp_properties;
+    Canvas debug_menuCanvas;
 
     public enum MenuControl_States { MAIN, STAT, DEBUG, ITEMS}
     public MenuControl_States mainState;
@@ -62,9 +75,11 @@ public class MenuController : MonoBehaviour
         menuCanvas.sortingOrder = 9;
         menu.SetActive(true);
     }
+    ////////////////////////////////
+    // THIS IS FOR THE STATS MENU //
+    ////////////////////////////////
     public void setUpMenu_stats() {
         mainState = MenuControl_States.STAT;
-        
         stats_menu_tmp = Instantiate(stats_menu);
         stats_menu_tmp_properties = stats_menu_tmp.GetComponent<statsMenuBehavior>();
         setStatus_stats();
@@ -81,5 +96,29 @@ public class MenuController : MonoBehaviour
     public void setStatus_stats() {
         stats_menu_tmp_properties.status = true;
     }
+
+    public void setUpMenu_debug()
+    {
+        mainState = MenuControl_States.DEBUG;
+        debug_menu_tmp = Instantiate(debug_menu);
+        debug_menu_tmp_properties = debug_menu_tmp.GetComponent<debugMenuBehavior>();
+        setStatus_debug();
+        debug_menuCanvas = debug_menu_tmp.GetComponent<Canvas>();
+        debug_menuCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+        debug_menuCanvas.worldCamera = Camera.main;
+        debug_menuCanvas.planeDistance = 10f;
+        debug_menuCanvas.sortingLayerName = "statMenuLayer";
+        debug_menuCanvas.sortingOrder = 1;
+    }
+    public void setStatus_debug()
+    {
+        debug_menu_tmp_properties.status = true;
+    }
+    public bool getStatus_debug()
+    {
+        return debug_menu_tmp_properties.getStatus();
+    }
+
+
 
 }
