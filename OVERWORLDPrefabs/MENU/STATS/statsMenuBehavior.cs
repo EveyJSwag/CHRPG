@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class statsMenuBehavior : MonoBehaviour
 {
     public Text HP_VALUE;
+    public Text MAX_HP_VALUE;
     public Text AP_VALUE;
     public Text ATK_VALUE;
     public Text DEF_VALUE;
@@ -49,6 +50,7 @@ public class statsMenuBehavior : MonoBehaviour
 
     public void getValues() {
         HP_VALUE.text = gameManager_properties.get_jerry_health().ToString();
+        MAX_HP_VALUE.text = gameManager_properties.get_jerry_max_health().ToString();
         AP_VALUE.text = gameManager_properties.get_jerry_ap().ToString();
         ATK_VALUE.text = gameManager_properties.get_jerry_attack().ToString();
         DEF_VALUE.text = gameManager_properties.get_jerry_defense().ToString();

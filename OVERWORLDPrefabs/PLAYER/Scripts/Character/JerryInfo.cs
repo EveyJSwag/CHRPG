@@ -14,7 +14,6 @@ public class JerryInfo : Character
         UIManager_properties = UIManager.GetComponent<OverworldUIManager>();
         transform.position = GameManager_properties.get_jerry_last_pos();
         UIManager_properties.setUIValues();
-        Debug.Log(health);
     }
 
     public string getLevel() {

@@ -7,6 +7,7 @@ public class BattleChar : MonoBehaviour
 {
     // ***PLAYER STATS***
     // ***Base***
+    private Manager gameManager_properties = new Manager();
     public int health;
     public int attack;
     public int defense;
@@ -35,7 +36,7 @@ public class BattleChar : MonoBehaviour
     /////////////////////////
     // UPDATE STATIC STATS //
     /////////////////////////
-    private Manager gameManager_properties = new Manager();
+    //private Manager gameManager_properties = new Manager();
 
     void Start()
     {
@@ -52,7 +53,8 @@ public class BattleChar : MonoBehaviour
         return speed;
     }
     public int getDefense() {
-        return defense;
+        //return defense;
+        return gameManager_properties.get_jerry_defense();
     }
     public void takeDamage(int damage) {
         damageTaken = damage - defense;
@@ -69,7 +71,8 @@ public class BattleChar : MonoBehaviour
         return health;
     }
     public int getAttack() {
-        return attack;
+        //return attack;
+        return gameManager_properties.get_jerry_attack();
     }
     public int getExp() {
         return total_exp;
@@ -119,6 +122,7 @@ public class BattleChar : MonoBehaviour
     // SET ALL OF THE STATIC VARS //
     ////////////////////////////////
     public void updateStats(bool killed=false) {
+        //getStats();
         gameManager_properties.set_jerry_level(calculateLevel());
         gameManager_properties.set_jerry_health(getPlayerHealth());
         gameManager_properties.set_jerry_attack(getAttack());
@@ -133,6 +137,7 @@ public class BattleChar : MonoBehaviour
         speed = gameManager_properties.get_jerry_speed();
         health = gameManager_properties.get_jerry_health();
         attack = gameManager_properties.get_jerry_attack();
+        defense = gameManager_properties.get_jerry_defense();
         total_exp = gameManager_properties.get_jerry_exp();
     }
 }

@@ -22,6 +22,15 @@ public class MenuController : MonoBehaviour
     Canvas stats_menuCanvas;
 
     /////////////////////
+    // ITEMS MENU VARS //
+    /////////////////////
+    public GameObject items_menu;
+    GameObject items_menu_tmp;
+    ItemsMenuBehavior items_menu_properties;
+    ItemsMenuBehavior items_menu_tmp_properties;
+    Canvas items_menuCanvas;
+
+    /////////////////////
     // DEBUG MENU VARS //
     /////////////////////
     public GameObject debug_menu;
@@ -75,9 +84,10 @@ public class MenuController : MonoBehaviour
         menuCanvas.sortingOrder = 9;
         menu.SetActive(true);
     }
-    ////////////////////////////////
-    // THIS IS FOR THE STATS MENU //
-    ////////////////////////////////
+
+    ///////////////////////////
+    // SETTING UP STATS MENU //
+    ///////////////////////////
     public void setUpMenu_stats() {
         mainState = MenuControl_States.STAT;
         stats_menu_tmp = Instantiate(stats_menu);
@@ -97,6 +107,9 @@ public class MenuController : MonoBehaviour
         stats_menu_tmp_properties.status = true;
     }
 
+    ///////////////////////////
+    // SETTING UP DEBUG MENU //
+    ///////////////////////////
     public void setUpMenu_debug()
     {
         mainState = MenuControl_States.DEBUG;
@@ -119,6 +132,29 @@ public class MenuController : MonoBehaviour
         return debug_menu_tmp_properties.getStatus();
     }
 
-
+    ///////////////////////////
+    // SETTING UP ITEMS MENU //
+    ///////////////////////////
+    public void setUpMenu_items()
+    {
+        mainState = MenuControl_States.ITEMS;
+        items_menu_tmp = Instantiate(items_menu);
+        items_menu_tmp_properties = items_menu_tmp.GetComponent<ItemsMenuBehavior>();
+        setStatus_items();
+        items_menuCanvas = items_menu_tmp.GetComponent<Canvas>();
+        items_menuCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+        items_menuCanvas.worldCamera = Camera.main;
+        items_menuCanvas.planeDistance = 10f;
+        items_menuCanvas.sortingLayerName = "statMenuLayer";
+        items_menuCanvas.sortingOrder = 1;
+    }
+    public void setStatus_items()
+    {
+        items_menu_tmp_properties.status = true;
+    }
+    public bool getStatus_items()
+    {
+        return items_menu_tmp_properties.getStatus();
+    }
 
 }

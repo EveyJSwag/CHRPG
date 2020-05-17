@@ -71,7 +71,10 @@ public class MenuBehaviour : MonoBehaviour
                     state = Menu_States.STATS;
                 }
                 if (choiceIndex == 1)
+                {
+                    menuController_properties.setUpMenu_items();
                     state = Menu_States.ITEMS;
+                }
                 if (choiceIndex == 2)
                     state = Menu_States.SAVE;
                 if (choiceIndex == 3)
@@ -93,9 +96,18 @@ public class MenuBehaviour : MonoBehaviour
                 state = Menu_States.CHOOSE;
             }
         }
-        else if (state == Menu_States.DEBUG) {
+        else if (state == Menu_States.DEBUG)
+        {
             myCursor.SetActive(false);
             if (menuController_properties.getStatus_debug() == false)
+            {
+                myCursor.SetActive(true);
+                state = Menu_States.CHOOSE;
+            }
+        }
+        else if (state == Menu_States.ITEMS) {
+            myCursor.SetActive(false);
+            if (menuController_properties.getStatus_items() == false) 
             {
                 myCursor.SetActive(true);
                 state = Menu_States.CHOOSE;

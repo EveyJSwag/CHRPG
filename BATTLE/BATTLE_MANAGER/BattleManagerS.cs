@@ -79,6 +79,8 @@ public class BattleManagerS : MonoBehaviour
     void Start()
     {
 
+        gameManager_properties.printInventory();
+
         // *** INITIALIZING PLAYER OBJECT ***
         player_properties = player.GetComponent<BattleChar>();
 
@@ -491,6 +493,7 @@ public class BattleManagerS : MonoBehaviour
         {
             victoryScreen_properties.set_lvl_text(player_properties.level, player_properties.calculateLevel());
             player_properties.level = player_properties.calculateLevel() + 1;
+            gameManager_properties.jerry_level_up();
         }
         ///////////////////////////////////////////////////////////////////////////
         // Spawn the cursor to the end button so player can go back to overworld //
