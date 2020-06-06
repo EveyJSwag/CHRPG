@@ -1202,6 +1202,8 @@ MonoBehaviour:
   itemAttrs_ap: {fileID: 6402228690819422663}
   itemsGrid: {fileID: 978460728997599803}
   BACK: {fileID: 8715441053907900792}
+  overworldUI: {fileID: 7169356282871737944, guid: 254ed77dbd05d144ea8a382e5a72e883,
+    type: 3}
 --- !u!1 &5414245062310325895
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,7 +6,6 @@ public class JerryInfo : Character
 {
     public GameObject UIManager;
     private OverworldUIManager UIManager_properties;
-
     private Manager GameManager_properties = new Manager();
     void Start()
     {
@@ -34,8 +33,5 @@ public class JerryInfo : Character
         health = GameManager_properties.get_jerry_health();
         attack = GameManager_properties.get_jerry_attack();
         total_exp = GameManager_properties.get_jerry_exp();
-
     }
-
-
 }

@@ -79,7 +79,7 @@ public class BattleManagerS : MonoBehaviour
     void Start()
     {
 
-        gameManager_properties.printInventory();
+        //gameManager_properties.printInventory();
 
         // *** INITIALIZING PLAYER OBJECT ***
         player_properties = player.GetComponent<BattleChar>();

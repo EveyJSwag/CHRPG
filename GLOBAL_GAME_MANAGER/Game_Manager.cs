@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Manager : MonoBehaviour
+public class Manager
 {
     ////////////////////////////
     // STATIC STATS FOR JERRY //
@@ -14,6 +14,7 @@ public class Manager : MonoBehaviour
     private static int jerry_max_health = 100;
     public static int jerry_attack = 25;
     public static int jerry_ap = 50;
+    public static int jerry_max_ap = 50;
     public static int jerry_defense = 10;
     public static int jerry_speed = 50;
     public static int jerry_level = 1;
@@ -25,9 +26,9 @@ public class Manager : MonoBehaviour
     /////////////////////////
     // INVENTORY AND ITEMS //
     /////////////////////////
-    public static GameObject[] inventory = new GameObject[100];
-    public static int inventoryIndex = 0;
-    public GameObject[] all_items;
+    //public static GameObject[] inventory = new GameObject[100];
+    //public static int inventoryIndex = 0;
+    //public GameObject[] all_items;
 
     
 
@@ -45,6 +46,7 @@ public class Manager : MonoBehaviour
 
     public void set_jerry_ap(int value) { jerry_ap = value; }
     public int get_jerry_ap() { return jerry_ap; }
+    public int get_jerry_max_ap() { return jerry_max_ap; }
 
     public void set_jerry_defense(int value) { jerry_defense = value; }
     public int get_jerry_defense() { return jerry_defense; }
@@ -65,6 +67,7 @@ public class Manager : MonoBehaviour
     {
         jerry_max_health += 20;
         jerry_attack += 3;
+        jerry_max_ap += 5;
         jerry_ap += 5;
         jerry_defense += 2;
         jerry_speed += 4;
@@ -76,6 +79,11 @@ public class Manager : MonoBehaviour
     /////////////////////////
     // INVENTORY FUNCTIONS //
     /////////////////////////
+    /////////////////////////////////////////////////
+    // *** THESE FUNCTIONS NEED TO BE MOVED... *** //
+    // *** UNITY KEEPS BITCHING AT ME...       *** //
+    /////////////////////////////////////////////////
+    /*
     public void add_to_inventory(string itemName) {
         inventory[inventoryIndex] = findItem(itemName);
         inventoryIndex++;
@@ -100,8 +108,30 @@ public class Manager : MonoBehaviour
             Debug.Log(inventory[i].name);
         }
     }
-    private void Update()
-    {
-        //printInventory();
+    public void useItem(int index) {
+        index--;
+        set_jerry_health(get_jerry_health()+inventory[index].GetComponent<ItemAttr>().HP_restore);
+        set_jerry_ap(get_jerry_ap() + inventory[index].GetComponent<ItemAttr>().AP_restore);
+        if (get_jerry_health() > get_jerry_max_health())
+            set_jerry_health(get_jerry_max_health());
+        if (get_jerry_ap() > get_jerry_max_ap())
+            set_jerry_ap(get_jerry_max_ap());
+        setInventory(index);
     }
+    public void setInventory(int removeAt) {
+        int oldLength = getInventoryIndex();
+        int newIndex = 0;
+        GameObject [] tempInventory = new GameObject [100];
+        for (int i = 0; i < oldLength; i++)
+        {
+            if (i != removeAt)
+            {
+                tempInventory[newIndex] = inventory[i];
+                newIndex++;
+            }
+        }
+        inventory = tempInventory;
+        inventoryIndex--;
+    }
+*/
 }

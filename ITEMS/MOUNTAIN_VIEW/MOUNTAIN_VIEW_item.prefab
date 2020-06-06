@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6657298859800419835}
   - component: {fileID: 1055812375502485192}
   - component: {fileID: 3277376320148028294}
+  - component: {fileID: 3271114458967898195}
   m_Layer: 0
   m_Name: MOUNTAIN_VIEW_item
   m_TagString: Untagged
@@ -89,12 +90,29 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4947644415652175424}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3bdaaf5947ff7974c9bc22bfab6675c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Mountain View
   Description: Knock off mountain dew... You can't even get Mello Yellow
+  HP_restore: 0
+  AP_restore: 10
+--- !u!114 &3271114458967898195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4947644415652175424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27fadde32c53cd9448fc9d7270ee4d3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 0}
+  Name: Mountain View
+  Description: Knock off mountain dew... You can't even get Mello Yellow...
   HP_restore: 0
   AP_restore: 10
