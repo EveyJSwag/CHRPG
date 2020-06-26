@@ -9,7 +9,7 @@ public class SpawnEnemyOverworld : MonoBehaviour
     public Vector2 levelBorderPos;
     public Vector2 levelBorderNeg;
     public int maxEnemyNum;
-    private int enemiesToSpawn;
+    public int enemiesToSpawn;
 
 
     public GameObject playerChar;

@@ -177,7 +177,6 @@ public class BattleManagerS : MonoBehaviour
     public void turnManager() {
         if (turnIndex >= turnQueueLength) {
             turnIndex = 0;
-            Debug.Log("Enemies Left " + enemy_properties.getSize());
         }
 
         /////////////////
@@ -187,7 +186,6 @@ public class BattleManagerS : MonoBehaviour
             //////////////////////////////////////////
             // Configure the victory screen here... //
             //////////////////////////////////////////
-            
             
             if (Input.GetKeyUp(KeyCode.Return)) {
                 player_properties.updateStats(true);

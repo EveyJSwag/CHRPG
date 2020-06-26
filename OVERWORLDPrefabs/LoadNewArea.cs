@@ -23,7 +23,7 @@ public class LoadNewArea : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) {
         
         if (other.gameObject.name == "Final_Jerry_Overworld") {
-            Debug.Log(other.transform.position);
+            //Debug.Log(other.transform.position);
             gameManager_properties.set_jerry_last_pos(other.transform.position);
             SceneManager.LoadScene("BattleScene");
             Destroy(FindObjectOfType<GameObject>(), 0.1f);

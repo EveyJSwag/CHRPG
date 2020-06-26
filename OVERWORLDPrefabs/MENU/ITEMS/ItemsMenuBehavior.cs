@@ -7,6 +7,7 @@ public class ItemsMenuBehavior : MonoBehaviour
 {
 
     public bool status = false;
+    int childNum;
     ////////////
     // CURSOR //
     ////////////
@@ -19,6 +20,7 @@ public class ItemsMenuBehavior : MonoBehaviour
     ////////////////
     //Manager game_manager_properties = new Manager();
     InventoryController inv_controller_properties;
+    int[] inv_amt;
 
     /////////////////
     // TEXT FIELDS //
@@ -27,6 +29,8 @@ public class ItemsMenuBehavior : MonoBehaviour
     public Text itemDescriptions;
     public Text itemAttrs_hp;
     public Text itemAttrs_ap;
+    public Text itemAmt_x;
+    public Text itemAmt;
     public GameObject itemsGrid;
     Vector3[] fourCorners = new Vector3[4];
     public GameObject BACK;
@@ -54,13 +58,21 @@ public class ItemsMenuBehavior : MonoBehaviour
     void Start()
     {
         inv_controller_properties = GameObject.Find("ITEM_MANAGER").GetComponent<InventoryController>();
+        inv_amt = inv_controller_properties.getInventoryAmount();
+        
         overworldUI_properties = GameObject.Find("Overworld_UI").GetComponent<OverworldUIManager>();
-        itemsGrid.GetComponent<RectTransform>().GetLocalCorners(fourCorners);
-        Debug.Log(fourCorners[0] + ", " + fourCorners[1] +", "+ fourCorners[2] +", "+ fourCorners[3]);
+        
         status = true;
+        
         cursorSpawnPos = new Vector3(BACK.transform.position.x + 2f, BACK.transform.position.y);
         cursor_items = Instantiate(cursor, cursorSpawnPos, Quaternion.identity);
-        itemGrid = this.gameObject.transform.GetChild(7);
+
+        ////////////////////////////////////////////////////
+        // 'ITEM_GRID' SHOULD ALWAYS BE THE LAST CHILD... //
+        ////////////////////////////////////////////////////
+        childNum = this.gameObject.transform.childCount;
+        itemGrid = this.gameObject.transform.GetChild(childNum-1);
+
         displayInventory();
     }
 
@@ -69,12 +81,12 @@ public class ItemsMenuBehavior : MonoBehaviour
         /////////////////////
         // SELECTING ITEMS //
         /////////////////////
-        if(choiceIndex > 0 && choiceIndex <= inv_controller_properties.getInventoryIndex())
+        if (choiceIndex > 0 && choiceIndex <= inv_controller_properties.getInventoryIndex() && inv_controller_properties.getInventoryIndex() > 0)
         {
             if (Input.GetKeyUp(KeyCode.LeftArrow))
             {
                 choiceIndex--;
-                if (choiceIndex == (1-1) || choiceIndex == (5-1) || choiceIndex == (9-1)) 
+                if (choiceIndex == (1 - 1) || choiceIndex == (5 - 1) || choiceIndex == (9 - 1))
                 {
                     if (getRow(choiceIndex + 1) == 0)
                     {
@@ -83,7 +95,7 @@ public class ItemsMenuBehavior : MonoBehaviour
                             choiceIndex = inv_controller_properties.getInventoryIndex();
                         }
                         else
-                        { 
+                        {
                             choiceIndex = 4;
                         }
                     }
@@ -98,7 +110,8 @@ public class ItemsMenuBehavior : MonoBehaviour
                             choiceIndex = 8;
                         }
                     }
-                    else if (getRow(choiceIndex + 1) == 2) {
+                    else if (getRow(choiceIndex + 1) == 2)
+                    {
                         if (inv_controller_properties.getInventoryIndex() < 12)
                         {
                             choiceIndex = inv_controller_properties.getInventoryIndex();
@@ -113,16 +126,18 @@ public class ItemsMenuBehavior : MonoBehaviour
             else if (Input.GetKeyUp(KeyCode.RightArrow))
             {
                 choiceIndex++;
-                if (choiceIndex == 5 || choiceIndex == 9 || choiceIndex == 13 || choiceIndex == inv_controller_properties.getInventoryIndex() + 1) {
-                    if (getRow(choiceIndex-1) == 0)
+                if (choiceIndex == 5 || choiceIndex == 9 || choiceIndex == 13 || choiceIndex == inv_controller_properties.getInventoryIndex() + 1)
+                {
+                    if (getRow(choiceIndex - 1) == 0)
                     {
                         choiceIndex = 1;
                     }
-                    else if (getRow(choiceIndex-1) == 1)
+                    else if (getRow(choiceIndex - 1) == 1)
                     {
                         choiceIndex = 5;
                     }
-                    else {
+                    else
+                    {
                         choiceIndex = 4;
                     }
                 }
@@ -138,8 +153,6 @@ public class ItemsMenuBehavior : MonoBehaviour
                 else if (choiceIndex == (2 - 4) || choiceIndex == (3 - 4) || choiceIndex == (4 - 4))
                 {
                     int currentLength = inv_controller_properties.getInventoryIndex();
-                    Debug.Log("Current Length: " + currentLength);
-                    Debug.Log("Current Row: " + getRow(currentLength));
                     int scaler = (getRow(currentLength) + 1) * 4;
                     int sLength = scaler + choiceIndex;
 
@@ -158,7 +171,8 @@ public class ItemsMenuBehavior : MonoBehaviour
                             choiceIndex = sLength;
                         }
                     }
-                    else {
+                    else
+                    {
                         if (sLength > currentLength)
                         {
                             choiceIndex = 0;
@@ -193,8 +207,9 @@ public class ItemsMenuBehavior : MonoBehaviour
                             break;
                     }
                 }
-                else if ((choiceIndex == (1 + 4) || choiceIndex == (5 + 4) || choiceIndex == (9 + 4)) && choiceIndex > inv_controller_properties.getInventoryIndex()) {
-                    choiceIndex = 0;            
+                else if ((choiceIndex == (1 + 4) || choiceIndex == (5 + 4) || choiceIndex == (9 + 4)) && choiceIndex > inv_controller_properties.getInventoryIndex())
+                {
+                    choiceIndex = 0;
                 }
             }
             if (choiceIndex != 0)
@@ -203,7 +218,8 @@ public class ItemsMenuBehavior : MonoBehaviour
                 displayDescription(choiceIndex);
             }
         }
-        else {
+        else if (inv_controller_properties.getInventoryIndex() > 0)
+        {
             if (Input.GetKeyUp(KeyCode.UpArrow))
             {
                 if (inv_controller_properties.getInventoryIndex() >= 5 && inv_controller_properties.getInventoryIndex() <= 8)
@@ -214,7 +230,8 @@ public class ItemsMenuBehavior : MonoBehaviour
                 {
                     choiceIndex = 9;
                 }
-                else {
+                else
+                {
                     choiceIndex = 1;
                 }
             }
@@ -228,31 +245,41 @@ public class ItemsMenuBehavior : MonoBehaviour
                 displayDescription(choiceIndex);
             }
         }
-        if (choiceIndex == 0) {
-            cursor_items.transform.position  = BACK.transform.position;
+        if (choiceIndex == 0)
+        {
+            cursor_items.transform.position = BACK.transform.position;
+            clearDescription();
         }
         ////////////////////
         // PRESSING ENTER //
         ////////////////////
-        if (Input.GetKeyDown(KeyCode.Return)) {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
             if (choiceIndex == 0)
             {
                 Destroy(cursor_items);
                 Destroy(this.gameObject);
                 status = false;
             }
-            else {
+            else
+            {
                 inv_controller_properties.useItem(choiceIndex);
                 overworldUI_properties.updateUIValues();
-                redoInventory();
+                if (inv_amt[choiceIndex - 1] < 1)
+                {
+                    redoInventory(choiceIndex);
+                }
+                else
+                    displayDescription(choiceIndex);
+
                 if (inv_controller_properties.getInventoryIndex() == 0)
                     choiceIndex = 0;
-                else if (inv_controller_properties.getInventoryIndex() == choiceIndex - 1) {
+                else if (inv_controller_properties.getInventoryIndex() == choiceIndex - 1)
                     choiceIndex--;
-                }
+                
             }
         }
-
+        
     }
 
     public void displayInventory() {
@@ -267,7 +294,7 @@ public class ItemsMenuBehavior : MonoBehaviour
             temp.GetComponent<SpriteRenderer>().sortingLayerName = "BattleCursorLayer";
         }
     }
-    public void redoInventory() {
+    public void redoInventory(int index) {
         int inventoryLength = inv_controller_properties.getInventoryIndex();
         for (int i = 12; i < inventoryLength + 13; i++) { 
             Destroy(itemGrid.GetChild(i).gameObject);
@@ -279,7 +306,21 @@ public class ItemsMenuBehavior : MonoBehaviour
         itemName.text = item_properties.Name;
         itemDescriptions.text = item_properties.Description;
         itemAttrs_hp.text = "+" + item_properties.HP_restore.ToString() + " HP";
-        itemAttrs_ap.text = "+" + item_properties.AP_restore.ToString() + " AP"; 
+        itemAttrs_ap.text = "+" + item_properties.AP_restore.ToString() + " AP";
+        itemAmt_x.text = "x";
+        itemAmt.text = inv_controller_properties.getInventoryAmount()[index-1].ToString();
+        for (int i = 0; i < inv_controller_properties.getInventoryIndex(); i++) {
+            Debug.Log(i+ ": " + inv_controller_properties.getInventoryAmount()[i]);
+        }
+    }
+
+    public void clearDescription() {
+        itemName.text = "";
+        itemDescriptions.text = "";
+        itemAttrs_hp.text = "";
+        itemAttrs_ap.text = "";
+        itemAmt_x.text = "";
+        itemAmt.text = "";
     }
 
     private int getRow(int length) {

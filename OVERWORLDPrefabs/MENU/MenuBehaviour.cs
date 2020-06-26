@@ -113,10 +113,6 @@ public class MenuBehaviour : MonoBehaviour
                 state = Menu_States.CHOOSE;
             }
         }
-        
-        Debug.Log(choiceIndex);
-        
-
     }
     public void setUpCursor() {
        

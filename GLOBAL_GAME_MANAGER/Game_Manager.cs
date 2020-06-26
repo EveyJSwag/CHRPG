@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Manager
+public class Manager 
 {
     ////////////////////////////
     // STATIC STATS FOR JERRY //
