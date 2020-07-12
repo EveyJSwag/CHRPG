@@ -90,7 +90,6 @@ public class InventoryController : MonoBehaviour
         // THIS IS DONE FOR THE INVENTORY AND //
         // THE INVENTORY AMOUNT               //
         ////////////////////////////////////////
-        
         int oldLength = getInventoryIndex();
         int newIndex = 0;
 

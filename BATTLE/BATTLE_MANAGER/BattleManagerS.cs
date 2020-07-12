@@ -12,7 +12,7 @@ public class BattleManagerS : MonoBehaviour
     private Manager gameManager_properties = new Manager();
     
     // *** BATTLE STATES ***
-    public enum BattleState { DECIDETURN, PLAYERPARTYTURNSTART, PLAYERPARTYTURN,PARTYSELECTACTION, PARTYSELECTENEMY, PARTYATTACKSTART, PARTYATTACKING,PARTYATTACKEND,ENEMYPARTYTURN, ENEMYSELECTACTION, ENEMYATTACKSTART,ENEMYATTACKEND,WON, LOST}
+    public enum BattleState { DECIDETURN, PLAYERPARTYTURNSTART, PLAYERPARTYTURN,PARTYSELECTACTION, PARTYSELECTENEMY, PARTYATTACKSTART, PARTYATTACKING,PARTYATTACKEND, PARTYSELECTITEM,ENEMYPARTYTURN, ENEMYSELECTACTION, ENEMYATTACKSTART,ENEMYATTACKEND,WON, LOST}
     public BattleState state;
     private float moveSpeed = 30f;
 
@@ -35,10 +35,18 @@ public class BattleManagerS : MonoBehaviour
     // *** UI OBJECTS *** //
     public GameObject UIController;
     UIController UI_properties;
+    
     public GameObject damageDisplayer;
     DamageSpawner floating_damage_number;
+
     public GameObject victoryScreen;
     VictoryScreen victoryScreen_properties;
+
+    public Canvas itemMenu;
+    Canvas tmpItemMenu;
+    Vector3 itemMenu_spawnV = new Vector3(3,0);
+    ItemsMenuBehavior menuBehav;
+
     private Vector3 end_text_location;
     
     GameObject cursor;
@@ -138,9 +146,7 @@ public class BattleManagerS : MonoBehaviour
 
     }
 
-    // *** MAIN GAME LOOP... NOTICE THERE'S ONLY ONE FUNCTION IN IT ***
-    // *** GOD PROGRAMMER = ME ***
-    // *** JK, I FUCKING SUCK AND HATE MYSELF ;) ***
+    // *** MAIN GAME LOOP ***
     void Update()
     {
         turnManager();  
@@ -158,8 +164,7 @@ public class BattleManagerS : MonoBehaviour
         }
         turnQueue[queueIndex] = player;
         speedArray[queueIndex] = (int)player_properties.getPlayerSpeed();
-        /// YES, THIS IS FUCKING BUBBLE SORT, DO NOT FUCKING ROAST ME
-        /// FUCK
+
         for (int i = 0; i < queueIndex+1; i++) {
             for (int j = i; j < queueIndex; j++) {
                 if (speedArray[i] < speedArray[j+1]) {
@@ -350,7 +355,7 @@ public class BattleManagerS : MonoBehaviour
     private void changeActionSelection(GameObject cursor, Vector3[] positionArr, Vector3 enemyLocation) {
         /// THIS FUNCTION IS FOR CHANGING THE POSITION OF THE CURSOR THAT SELECTS THE PLAYER'S ACTION...
         /// THE CURSOR IS JUST FOR SHOW, BUT THE UP AND DOWN ARROWS CHANGE THE ACTION THAT IS SELECTED.
-        
+
         //// ** BUTTON SELECT INDEX GUIDE **
         //   ATTACK = 0
         //   ABILITY = 1
@@ -373,13 +378,29 @@ public class BattleManagerS : MonoBehaviour
             cursor.transform.position = positionArr[buttonSelectIndex];
         }
         ////////////////////////////////
-        
+
         /// ONCE ENTER IS PRESSED THE CURSOR WILL CHANGE POSITION
-        //  *(NEED TO ADD SOMETHING FOR ABILITIES AND ITEMS AS WELL)* 
-        else if (Input.GetKeyUp(KeyCode.Return) && buttonSelectIndex == 0) {
+        ////////////
+        // ATTACK //
+        ////////////
+        else if (Input.GetKeyUp(KeyCode.Return) && buttonSelectIndex == 0)
+        {
             state = BattleState.PARTYSELECTENEMY;
             cursor.transform.position = enemyLocation;
             buttonSelectIndex = 0;
+        }
+        //////////
+        // ITEM //
+        //////////
+        else if (Input.GetKeyUp(KeyCode.Return) && buttonSelectIndex == 2) {
+            state = BattleState.PARTYSELECTITEM;
+            tmpItemMenu = Instantiate(itemMenu, itemMenu_spawnV, Quaternion.identity);
+            tmpItemMenu.GetComponent<Canvas>().worldCamera = Camera.main;
+            tmpItemMenu.GetComponent<Canvas>().sortingLayerName = "BattleItemMenuLayer";
+            tmpItemMenu.GetComponent<Canvas>().planeDistance = 10f;
+            
+
+
         }
         /////////////////////////////////////////////////////////
     }
@@ -402,8 +423,10 @@ public class BattleManagerS : MonoBehaviour
                 buttonSelectIndex = 0;
             cursor.transform.position = positionArr[buttonSelectIndex];
         }
-        ////////////////////////////////
-        /// ONCE ENTER IS PRESSED THE CURSOR WILL BE DESTROYED AND THE ENEMY WILL BE SELECTED
+        ////////////////////////////////////////////////////////
+        // ONCE ENTER IS PRESSED THE CURSOR WILL BE DESTROYED //
+        // AND THE ENEMY WILL BE SELECTED                     //
+        //////////////////////////////////////////////////////// 
         else if (Input.GetKeyUp(KeyCode.Return))
         {
             state = stateToChangeTo;
@@ -412,7 +435,6 @@ public class BattleManagerS : MonoBehaviour
             travel_to = enemyChosen.transform.position;
             travel_to = new Vector3(travel_to.x, travel_to.y+2.5f);
             enemyChosenIndex = buttonSelectIndex;
-            Debug.Log("enemyChosen: " + buttonSelectIndex);
             buttonSelectIndex = 0;
             Destroy(cursor);
             Destroy(abilityList);
@@ -438,7 +460,7 @@ public class BattleManagerS : MonoBehaviour
         return positionArr;
     }
     private Vector3[] initEnemyArray () {
-        // ***ESSENTIALLY DOES THE SAME THING AS ABOVE EXCEPT WITH ENEMIES***
+        // ***ESSENTIALLY DOES THE SAME THING AS ABOVE EXCEPT WITH ENEMIES*** 
         int enemy_amount = enemy.GetComponent<SpanEnemies>().getSize();
         SpanEnemies enemy_x = enemy.GetComponent<SpanEnemies>();
         Vector3[] enemyPosArr = new Vector3[enemy_amount];
@@ -473,7 +495,6 @@ public class BattleManagerS : MonoBehaviour
         if (enemyToKill_speed > player_properties.getPlayerSpeed())
             turnIndex--;
         initTurnQueue();
-        Debug.Log(turnIndex);
         Destroy(enemyToKill);
     }
 
@@ -500,4 +521,12 @@ public class BattleManagerS : MonoBehaviour
         end_text_location = new Vector3(end_text_location.x + 1f, end_text_location.y);
         cursor = UI_properties.insCursor(end_text_location);
     }
+
+    /////////////////////////////////////////////////////////////////
+    // THIS FUNCTION WILL SHIFT VECTORS (SINCE IT HAPPENS SO MUCH) //
+    /////////////////////////////////////////////////////////////////
+    public Vector3 vectorShift(Vector3 v, float x, float y, float z = 0) {
+        return new Vector3(v.x + x, v.y + y, v.z + z); 
+    }
+
 }

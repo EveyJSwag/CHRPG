@@ -8,16 +8,21 @@ public class newHealthMan : MonoBehaviour
     // Start is called before the first frame update
     Text health;
     public GameObject player;
+
+    Manager gameManager = new Manager();
+    
     void Start()
     {
         health = GetComponent<Text>();
-        //Debug.Log("POSITION" + health.transform.position);
-        //health.transform.position = new Vector3(-174f, -181f, 0f);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        health.text = player.GetComponent<BattleChar>().getPlayerHealth().ToString();
+        //health.text = player.GetComponent<BattleChar>().getPlayerHealth().ToString();
+        health.text = gameManager.get_jerry_health().ToString();
     }
+
+
 }

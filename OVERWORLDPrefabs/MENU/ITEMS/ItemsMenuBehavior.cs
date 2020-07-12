@@ -57,13 +57,25 @@ public class ItemsMenuBehavior : MonoBehaviour
     
     void Start()
     {
+        ///////////////////////////////////////
+        // GET THE INVENTORY DATA STRUCTURES //
+        ///////////////////////////////////////
         inv_controller_properties = GameObject.Find("ITEM_MANAGER").GetComponent<InventoryController>();
         inv_amt = inv_controller_properties.getInventoryAmount();
-        
-        overworldUI_properties = GameObject.Find("Overworld_UI").GetComponent<OverworldUIManager>();
-        
+
+        try
+        {
+            overworldUI_properties = GameObject.Find("Overworld_UI").GetComponent<OverworldUIManager>();
+        }
+        catch
+        { 
+            
+        }
         status = true;
         
+        /////////////////
+        // CURSOR VARS //
+        /////////////////
         cursorSpawnPos = new Vector3(BACK.transform.position.x + 2f, BACK.transform.position.y);
         cursor_items = Instantiate(cursor, cursorSpawnPos, Quaternion.identity);
 
@@ -329,4 +341,31 @@ public class ItemsMenuBehavior : MonoBehaviour
     public bool getStatus() {
         return status;
     }
+
+    public void battleStart() {
+        ///////////////////////////////////////
+        // GET THE INVENTORY DATA STRUCTURES //
+        ///////////////////////////////////////
+        inv_controller_properties = GameObject.Find("ITEM_MANAGER").GetComponent<InventoryController>();
+        inv_amt = inv_controller_properties.getInventoryAmount();
+
+        //overworldUI_properties = GameObject.Find("Overworld_UI").GetComponent<OverworldUIManager>();
+
+        status = true;
+
+        /////////////////
+        // CURSOR VARS //
+        /////////////////
+        cursorSpawnPos = new Vector3(BACK.transform.position.x + 2f, BACK.transform.position.y);
+        cursor_items = Instantiate(cursor, cursorSpawnPos, Quaternion.identity);
+
+        ////////////////////////////////////////////////////
+        // 'ITEM_GRID' SHOULD ALWAYS BE THE LAST CHILD... //
+        ////////////////////////////////////////////////////
+        childNum = this.gameObject.transform.childCount;
+        itemGrid = this.gameObject.transform.GetChild(childNum - 1);
+
+        displayInventory();
+    }
+
 }

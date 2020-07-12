@@ -62,6 +62,7 @@ public class BattleChar : MonoBehaviour
             damageTaken = 0;
         }
         health -= damageTaken;
+        gameManager_properties.set_jerry_health(health);
     }
     public int getDamageTaken()
     {
@@ -71,7 +72,6 @@ public class BattleChar : MonoBehaviour
         return health;
     }
     public int getAttack() {
-        //return attack;
         return gameManager_properties.get_jerry_attack();
     }
     public int getExp() {
