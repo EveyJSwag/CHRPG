@@ -102,7 +102,6 @@ public class BattleManagerS : MonoBehaviour
 
         // *** THIS IS THE LOCATION OF THE PLAYER'S NAME... ***
         // *** WILL NEED SOMETHING FOR OTHER PARTY MEMBERS... ***
-        //playerName = UIController.GetComponent<UIController>().charName;
         playerName = UI_properties.charName;
 
         // *** THIS IS USED THE MOVE FUNCTION ***
@@ -151,10 +150,7 @@ public class BattleManagerS : MonoBehaviour
     {
         turnManager();  
     }
-    // JERRY NEEDS TO GO UP
-    // ENEMY GO DOWN
     public void initTurnQueue() {
-        //Place holder for when other party memebers are added
         int queueIndex = 0;
         int [] speedArray = new int[turnQueue.Length];
         for (int i = 0; i < enemy_properties.getSize(); i++) {
@@ -408,6 +404,7 @@ public class BattleManagerS : MonoBehaviour
             tmpItemMenu.GetComponent<Canvas>().worldCamera = Camera.main;
             tmpItemMenu.GetComponent<Canvas>().sortingLayerName = "BattleItemMenuLayer";
             tmpItemMenu.GetComponent<Canvas>().planeDistance = 10f;
+            buttonSelectIndex = 0;
         }
         /////////////////////////////////////////////////////////
     }
