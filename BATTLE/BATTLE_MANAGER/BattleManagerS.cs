@@ -210,7 +210,7 @@ public class BattleManagerS : MonoBehaviour
                 state = BattleState.ENEMYPARTYTURN;
             if (enemy_properties.getSize() < 1)
             {
-                
+
                 state = BattleState.WON;
                 Vector3 victoryScreenPos = new Vector3(player.transform.position.x + 13f, player.transform.position.y - 4f);
 
@@ -263,9 +263,11 @@ public class BattleManagerS : MonoBehaviour
                 enemyChosen_properties.takeDamage(player_properties.getAttack());
             }
         }
-        else if (state == BattleState.PARTYATTACKING) {
-            
-            if (Math.Round(player_properties.getNormTime(),2) > 0.55 && displayDamage) {
+        else if (state == BattleState.PARTYATTACKING)
+        {
+
+            if (Math.Round(player_properties.getNormTime(), 2) > 0.55 && displayDamage)
+            {
                 floating_damage_number.insDam(enemyChosen, enemyChosen_properties.getDamageTaken());
                 displayDamage = false;
                 if (enemyChosen_properties.getHealth() <= 0)
@@ -273,7 +275,7 @@ public class BattleManagerS : MonoBehaviour
                     killEnemy(enemyChosen);
                 }
             }
-            
+
             if (!player_properties.getAnimState())
             {
                 state = BattleState.PARTYATTACKEND;
@@ -287,12 +289,20 @@ public class BattleManagerS : MonoBehaviour
             // I HATE THAT I HAVE TO USE THIS... //
             ///////////////////////////////////////
             displayDamage = true;
-            // ***PLAYER MOVES BACK TO ORIGINAL SPOT***
+            // ***PLAYER MOVES BACK TO ORIGINAL SPOT*** //
             move(player, travel_to, player_original_position, player_initial_start_time, player_travel_length);
             if (player.transform.position == player_original_position)
             {
                 player_properties.setAllAnimFalseBut("idle");
                 state = BattleState.DECIDETURN;
+                turnIndex++;
+            }
+        }
+        else if (state == BattleState.PARTYSELECTITEM) {
+            if (Input.GetKeyUp(KeyCode.Return)) {
+                state = BattleState.DECIDETURN;
+                Destroy(cursor);
+                Destroy(abilityList);
                 turnIndex++;
             }
         }
@@ -398,9 +408,6 @@ public class BattleManagerS : MonoBehaviour
             tmpItemMenu.GetComponent<Canvas>().worldCamera = Camera.main;
             tmpItemMenu.GetComponent<Canvas>().sortingLayerName = "BattleItemMenuLayer";
             tmpItemMenu.GetComponent<Canvas>().planeDistance = 10f;
-            
-
-
         }
         /////////////////////////////////////////////////////////
     }
