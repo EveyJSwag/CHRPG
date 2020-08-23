@@ -9,7 +9,7 @@ public class BattleManagerS : MonoBehaviour
 {
     // *** GAME MANAGER ***
     //public GameObject gameManager;
-    private Manager gameManager_properties = new Manager();
+    private Manager gameManager_properties = Manager.getInstance();
     
     // *** BATTLE STATES ***
     public enum BattleState { DECIDETURN, PLAYERPARTYTURNSTART, PLAYERPARTYTURN,PARTYSELECTACTION, PARTYSELECTENEMY, PARTYATTACKSTART, PARTYATTACKING,PARTYATTACKEND, PARTYSELECTITEM,ENEMYPARTYTURN, ENEMYSELECTACTION, ENEMYATTACKSTART,ENEMYATTACKEND,WON, LOST}

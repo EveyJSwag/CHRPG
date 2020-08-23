@@ -6,7 +6,7 @@ public class JerryInfo : Character
 {
     public GameObject UIManager;
     private OverworldUIManager UIManager_properties;
-    private Manager GameManager_properties = new Manager();
+    private Manager GameManager_properties = Manager.getInstance();
     void Start()
     {
         getStats();

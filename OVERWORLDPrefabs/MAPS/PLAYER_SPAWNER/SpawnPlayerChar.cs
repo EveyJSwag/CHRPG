@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnPlayerChar : MonoBehaviour
 {
     public GameObject player;
-    private Manager gameManager_properties = new Manager();
+    private Manager gameManager_properties = Manager.getInstance();
     private Vector3 spawnPoint;
     void Start()
     {

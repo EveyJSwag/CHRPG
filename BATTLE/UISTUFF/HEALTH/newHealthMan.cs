@@ -9,7 +9,7 @@ public class newHealthMan : MonoBehaviour
     Text health;
     public GameObject player;
 
-    Manager gameManager = new Manager();
+    Manager gameManager = Manager.getInstance();
     
     void Start()
     {

@@ -7,7 +7,7 @@ public class BattleChar : MonoBehaviour
 {
     // ***PLAYER STATS***
     // ***Base***
-    private Manager gameManager_properties = new Manager();
+    private Manager gameManager_properties = Manager.getInstance();
     public int health;
     public int attack;
     public int defense;

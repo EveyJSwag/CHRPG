@@ -11,7 +11,7 @@ public class OverworldUIManager : MonoBehaviour
     public Text enemiesKilledValue;
     public GameObject character;
 
-    Manager gameManager_properties = new Manager();
+    Manager gameManager_properties = Manager.getInstance();
 
     public void setUIValues() {
         JerryInfo character_properties = character.GetComponent<JerryInfo>();

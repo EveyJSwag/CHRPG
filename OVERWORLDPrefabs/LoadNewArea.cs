@@ -8,7 +8,7 @@ public class LoadNewArea : MonoBehaviour
 
     private GameObject Enemy;
     // Start is called before the first frame update
-    private Manager gameManager_properties = new Manager();
+    private Manager gameManager_properties = Manager.getInstance();
     void Start()
     {
         

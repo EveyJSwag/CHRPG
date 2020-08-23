@@ -4,33 +4,33 @@ using UnityEngine;
 
 public class Manager 
 {
+    private static Manager SingleManager;
+    private Manager() { }
+    public static Manager getInstance()
+    {
+        if (SingleManager == null) 
+        {
+            SingleManager = new Manager();
+        }
+        return SingleManager;
+    }
     ////////////////////////////
     // STATIC STATS FOR JERRY //
     ////////////////////////////
     /**********************************
      * THESE VALUES ARE JUST DEFAULTS *
      **********************************/ 
-    public static int jerry_health = 100;
-    private static int jerry_max_health = 100;
-    public static int jerry_attack = 25;
-    public static int jerry_ap = 50;
-    public static int jerry_max_ap = 50;
-    public static int jerry_defense = 10;
-    public static int jerry_speed = 50;
-    public static int jerry_level = 1;
-    public static int jerry_exp = 0;
-    public static int enemies_killed = 0;
-    public static Vector3 last_pos = new Vector3(-13.35f, -1.34f);
-
-
-    /////////////////////////
-    // INVENTORY AND ITEMS //
-    /////////////////////////
-    //public static GameObject[] inventory = new GameObject[100];
-    //public static int inventoryIndex = 0;
-    //public GameObject[] all_items;
-
-    
+    public int jerry_health = 100;
+    private int jerry_max_health = 100;
+    public int jerry_attack = 25;
+    public int jerry_ap = 50;
+    public int jerry_max_ap = 50;
+    public int jerry_defense = 10;
+    public int jerry_speed = 50;
+    public int jerry_level = 1;
+    public int jerry_exp = 0;
+    public int enemies_killed = 0;
+    public Vector3 last_pos = new Vector3(-13.35f, -1.34f);
 
     /////////////////////////////////
     // SET/GET THESE STATS (JERRY) //

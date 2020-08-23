@@ -5,7 +5,7 @@ using UnityEngine;
 public class InventoryController : MonoBehaviour
 {
 
-    Manager game_manager_properties = new Manager();
+    Manager game_manager_properties = Manager.getInstance();
     /////////////////////////
     // INVENTORY AND ITEMS //
     /////////////////////////

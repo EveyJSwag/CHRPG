@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    private Manager GameManager_properties = new Manager();
+    private Manager GameManager_properties = Manager.getInstance();
     public Vector2 BOUNDARIES_POS;
     public Vector2 BOUNDARIES_NEG;
     public GameObject follow;

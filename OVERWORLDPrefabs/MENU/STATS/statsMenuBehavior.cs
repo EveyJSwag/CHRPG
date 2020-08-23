@@ -23,7 +23,7 @@ public class statsMenuBehavior : MonoBehaviour
     ////////////////////////
     // GAME MANAGER STUFF //
     ////////////////////////
-    Manager gameManager_properties = new Manager();
+    Manager gameManager_properties = Manager.getInstance();
 
     //////////////////////////
     // *** BUTTON GUIDE *** //
